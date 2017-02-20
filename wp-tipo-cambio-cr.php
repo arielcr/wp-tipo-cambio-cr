@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       Tipo de Cambio Costa Rica 
  * Plugin URI:        http://arielorozco.com/tutoriales/obtener-tipo-de-cambio-colones-dolares-en-wordpress/
- * Description:       Obtiene el tipo de cambio del dia (colones/dolares) del BCCR en Costa Rica.
+ * Description:       Gets the exchange rate from Costa Rica's Central Bank (BCCR).
  * Version:           1.0.0
  * Author:            Ariel Orozco
  * Author URI:        http://arielorozco.com
@@ -17,27 +17,27 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Constantes de tipo de cambio
+// Exchange rate constants
 define('WPTCR_COMPRA_CR', 317);
 define('WPTCR_VENTA_CR', 318);
 
-// URL del WebService
+// WebService URL
 define('WPTCR_IND_ECONOM_WS', "http://indicadoreseconomicos.bccr.fi.cr/indicadoreseconomicos/WebServices/wsIndicadoresEconomicos.asmx");
 
-// Metodo que se va a utilizar del WebService
+// WebService method
 define('WPTCR_IND_ECONOM_METH', "ObtenerIndicadoresEconomicosXML");
 
-// Numero de horas para actualizar los valores
+// Max number of hours to update the values
 define('WPTCR_TIME_LIMIT', 4);
 
 /**
- * Obtiene el tipo de cambio del dia
+ * Gets the current exchange rate
  *
- * @param string $tipo Tipo de cambio deseado (COMPRA/VENTA/EURO)
- * @param string $fecha Fecha del tipo de cambio deseado
- * @return float Valor del tipo de cambio
+ * @param string $tipo Exchange rate type (COMPRA/VENTA)
+ * @param string $fecha Exchange rate date
+ * @return float Exchange rate value
  */
-function wptcr_tipo_cambio($tipo = "", $fecha = "", $retorno = false){
+function wptcr_tipo_cambio($tipo = "", $fecha = ""){
     date_default_timezone_set('America/Costa_Rica');
     $fecha_tc = empty($fecha) ? date("d/m/Y") : $fecha;
     $fecha_actual = date('Y-m-d H:i:s');
@@ -94,38 +94,35 @@ function wptcr_tipo_cambio($tipo = "", $fecha = "", $retorno = false){
         }
     }
 
-    if(!$retorno) 
-        echo (float)$tipo_cambio;
-    else
-        return (float)$tipo_cambio;
+    return (float)$tipo_cambio;
 }
 
  /**
- * Convierte un monto de colones a dolares
+ * Converts an amount from colones to dollars
  *
- * @param $monto El monto a convertir
- * @return float El monto convertido
+ * @param $monto The amount to convert
+ * @return float The converted amount
  */
 function wptcr_convertir_colones_dolares($monto) {
-    $tc_venta = wptcr_tipo_cambio(WPTCR_VENTA_CR, '', true);
-    echo ($tc_venta > 0) ? number_format(($monto / $tc_venta), 2, '.', '') : 0;
+    $tc_venta = wptcr_tipo_cambio(WPTCR_VENTA_CR);
+    return ($tc_venta > 0) ? number_format(($monto / $tc_venta), 2, '.', '') : 0;
 }
 
 /**
- * Convierte un monto de dolares a colones
+ * Convert an amount from dollars to colones
  *
- * @param $monto El monto a convertir
- * @return float El monto convertido
+ * @param $monto The amount to convert
+ * @return float The converted amount
  */
 function wptcr_convertir_dolares_colones($monto) {
-    $tc_compra = wptcr_tipo_cambio(WPTCR_COMPRA_CR, '', true);
-    echo ($tc_compra > 0) ? number_format(($monto * $tc_compra), 2, '.', '') : 0;
+    $tc_compra = wptcr_tipo_cambio(WPTCR_COMPRA_CR);
+    return ($tc_compra > 0) ? number_format(($monto * $tc_compra), 2, '.', '') : 0;
 }
 
 /**
- * Obtiene datos por CURL
- * @param  string $Url Url del webservice
- * @return $output Respuesta del webservice
+ * Get data using CURL
+ * @param  string $Url Webservice URL
+ * @return $output Web service response
  */
 function wptcr_get_bccr_service_data($url) {
     if (!function_exists('curl_init')){ 
@@ -151,14 +148,14 @@ function wptcr_get_bccr_service_data($url) {
  */
 function wptcr_tipo_cambio_compra_shortcode() {
     ob_start();  
-    wptcr_tipo_cambio('COMPRA');
+    echo wptcr_tipo_cambio('COMPRA');
     return ob_get_clean();
 }
 add_shortcode('WPTCR_TIPO_CAMBIO_COMPRA', 'wptcr_tipo_cambio_compra_shortcode');
 
 function wptcr_tipo_cambio_venta_shortcode() {
     ob_start();  
-    wptcr_tipo_cambio('VENTA');
+    echo wptcr_tipo_cambio('VENTA');
     return ob_get_clean();
 }
 add_shortcode('WPTCR_TIPO_CAMBIO_VENTA', 'wptcr_tipo_cambio_venta_shortcode');
@@ -168,7 +165,7 @@ function wptcr_convertir_colones_dolares_shortcode($atts) {
         'monto' => '100'
     ), $atts));
     ob_start();  
-    wptcr_convertir_colones_dolares($monto);
+    echo wptcr_convertir_colones_dolares($monto);
     return ob_get_clean();
 }
 add_shortcode('WPTCR_CONVERTIR_COLONES_DOLARES', 'wptcr_convertir_colones_dolares_shortcode');
@@ -178,7 +175,7 @@ function wptcr_convertir_dolares_colones_shortcode($atts) {
         'monto' => '100'
     ), $atts));
     ob_start();  
-    wptcr_convertir_dolares_colones($monto);
+    echo wptcr_convertir_dolares_colones($monto);
     return ob_get_clean();
 }
 add_shortcode('WPTCR_CONVERTIR_DOLARES_COLONES', 'wptcr_convertir_dolares_colones_shortcode');

@@ -1,6 +1,6 @@
 === Tipo de Cambio Costa Rica ===
 Contributors: arielcr
-Tags: colones, dolares, tipo cambio, costa rica
+Tags: colones, dolares, tipo de cambio, costa rica
 Donate link: http://arielorozco.com
 Requires at least: 3.0.1
 Tested up to: 4.7
@@ -8,37 +8,42 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Obtiene el tipo de cambio del dia (colones/dolares) del BCCR en Costa Rica. 
+Gets the exchange rate from Costa Rica's Central Bank (BCCR).
 
 == Description ==
-Permite obtener el tipo de cambio del dia del BCCR en Costa Rica e insertarlo en cualquier archivo del template
-o por medio de tags en cualquier post/page. Tambien es posible convertir un monto de colones a dolares y viceversa por medio
-de funciones en el template o tambien con tags en los posts.
+This plugin gets the current exchange rate from Costa Rica's Central Bank (BCCR). It allows you to insert it into any template
+or with tags on any post or page. It is also possible to convert an amount of colones to dollars and vice versa through
+functions in the template or also with tags in the posts.
+
+This plugin relies on a 3rd party as a service. It uses BCCR's web service to get the exchanges rates. Service description can
+be found [here](http://indicadoreseconomicos.bccr.fi.cr/indicadoreseconomicos/WebServices/wsindicadoreseconomicos.asmx)
+
+You can find the plugin details on [this post](http://arielorozco.com/tutoriales/obtener-tipo-de-cambio-colones-dolares-en-wordpress/)
 
 == Installation ==
-Para instalar el plugin debe de hacer lo siguiente:
+To install the plugin you must do the following:
 
-1. Subir el archivo `cr-tipo-cambio.php` al folder `/wp-content/plugins/` 
-2. Activar el plugin a travez del menu \'Plugins\' en WordPress
+1. Upload the plugin files to the `/wp-content/plugins/wp-tipo-cambio-cr` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress
 
-**Utilizar en plugin en un archivo del template:**
+**To use the plugin on a template file:**
 
-* Obtener tipo de cambio:
+* Get the exchange rate:
 
-`<?php wptcr_tipo_cambio('COMPRA'); ?>`
-`<?php wptcr_tipo_cambio('VENTA'); ?>`
+`<?php echo wptcr_tipo_cambio('COMPRA'); ?>`
+`<?php echo wptcr_tipo_cambio('VENTA'); ?>`
 
-* Convertir un monto:
+* Convert a value:
 
-`<?php wptcr_convertir_colones_dolares(25000); ?>``
-`<?php wptcr_convertir_dolares_colones(100); ?>``
+`<?php echo wptcr_convertir_colones_dolares(25000); ?>`
+`<?php echo wptcr_convertir_dolares_colones(100); ?>`
 
-**Utilizar el plugin en un post**
+**To use the plugin in a post or page**
 
-Tipo de cambio de compra: [WPTCR_TIPO_CAMBIO_COMPRA]
+Sell Exchange Rate: [WPTCR_TIPO_CAMBIO_COMPRA]
 
-Tipo de cambio de venta: [WPTCR_TIPO_CAMBIO_VENTA]
+Buy Exchange Rate: [WPTCR_TIPO_CAMBIO_VENTA]
 
-Colones a Dolares: [WPTCR_CONVERTIR_COLONES_DOLARES monto=20000]
+Colones to Dollars: [WPTCR_CONVERTIR_COLONES_DOLARES monto=20000]
 
-Dolares a Colones: [WPTCR_CONVERTIR_DOLARES_COLONES monto=200]
+Dollars to Colones: [WPTCR_CONVERTIR_DOLARES_COLONES monto=200]
